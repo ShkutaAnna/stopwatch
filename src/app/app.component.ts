@@ -18,7 +18,7 @@ export class AppComponent {
   timerSubscription;
   
   ngOnInit(){
-    this.timerSubscription = timer(0, 1).subscribe(ellapsedCycles => {
+    this.timerSubscription = timer(0, 1000).subscribe(ellapsedCycles => {
       if(this.isRunning){
         this.time++;
       }
