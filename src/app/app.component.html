@@ -1,0 +1,28 @@
+<div class="header">
+  <label class="header-label">Stopwatch online</label>
+</div>
+
+<div class="container">
+  <div class="pannel">
+    <label class="time-label">
+      {{displayedTime}}
+    </label>
+  </div>
+  <div class="pannel">
+    <button (click)="startStopAction()" class="btn">
+      <span class="btn-label">
+        <div *ngIf="isRunning; then stop; else start"></div>
+        <ng-template #stop>Stop</ng-template>
+        <ng-template #start>Start</ng-template>
+      </span>
+    </button>
+    <button (dblclick)="waitAction()" class="btn">
+      <span class="btn-label">Wait</span>
+    </button>
+    <button (click)="resetAction()" class="btn">
+      <span class="btn-label">Reset</span>
+    </button>
+  </div>
+</div>
+
+<router-outlet></router-outlet>
