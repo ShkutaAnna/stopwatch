@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { timer } from "rxjs";
+import { Subscription, timer } from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -15,10 +15,12 @@ export class AppComponent {
   isWaiting : boolean = false;
   isRunning : boolean = false;
 
-  timerSubscription;
+  clickCount : number = 0;
+
+  timerSubscription: Subscription;
   
   ngOnInit(){
-    this.timerSubscription = timer(0, 1).subscribe(ellapsedCycles => {
+    this.timerSubscription = timer(0, 1000).subscribe(ellapsedCycles => {
       if(this.isRunning){
         this.time++;
       }
@@ -36,10 +38,18 @@ export class AppComponent {
   }
 
   waitAction(){
-    if(!this.isRunning)
-    return;
-    this.isRunning = !this.isRunning;
-    this.isWaiting = !this.isWaiting;
+    this.clickCount++;
+    if(this.clickCount === 1){
+      setTimeout(() => {
+        this.clickCount = 0;
+      }, 300)
+    } else {
+      this.clickCount = 0;
+      if(!this.isRunning)
+        return;
+      this.isRunning = !this.isRunning;
+      this.isWaiting = !this.isWaiting;
+    }
   }
 
   resetAction(){
