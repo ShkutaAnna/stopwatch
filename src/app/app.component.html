@@ -1,9 +1,9 @@
 <div class="header">
-  <label class="header-label">Stopwatch online</label>
+  <label class="header-label">Stopwatch</label>
 </div>
 
 <div class="container">
-  <div class="pannel">
+  <div class="pannel time-pannel">
     <label class="time-label">
       {{displayedTime}}
     </label>
@@ -16,7 +16,7 @@
         <ng-template #start>Start</ng-template>
       </span>
     </button>
-    <button (click)="waitAction()" class="btn">
+    <button id="waitButton" class="btn">
       <span class="btn-label">Wait</span>
     </button>
     <button (click)="resetAction()" class="btn">

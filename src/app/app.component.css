@@ -1,4 +1,6 @@
-.header{
+  
+  
+  .header{
     background-color: #e34400;
     height: 30pt;
     width: auto;
@@ -48,4 +50,10 @@
 
   .hidden{
     display: none;
+  }
+
+  .time-pannel {
+    border-radius: 30px;
+    border-color: darkgray;
+    border: solid;
   }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Subscription, timer } from "rxjs";
+import { fromEvent, Subscription, timer } from "rxjs";
+import { debounceTime, buffer, map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -15,16 +16,31 @@ export class AppComponent {
   isWaiting : boolean = false;
   isRunning : boolean = false;
 
-  clickCount : number = 0;
-
-  timerSubscription: Subscription;
+  timer$: Subscription;
+  waitButton$: Subscription;
   
   ngOnInit(){
-    this.timerSubscription = timer(0, 1000).subscribe(ellapsedCycles => {
+    this.timer$ = timer(0, 1000).subscribe(ellapsedCycles => {
       if(this.isRunning){
         this.time++;
       }
       this.displayedTime = this.getDisplayedTime(this.time);
+    });
+  }
+
+  ngAfterViewInit() {
+    //double click for 'wait button'; time between 2 clicks less then 300 mls
+    let clickStream$ = fromEvent(document.getElementById('waitButton'), 'click');
+    let buff$ = clickStream$.pipe(debounceTime(300));
+
+    this.waitButton$ = clickStream$.pipe(
+      buffer(buff$),
+      map(list => {
+        return list.length;
+      }),
+      filter(x => x === 2)
+    ).subscribe((res) => {
+      this.waitAction();
     });
   }
 
@@ -38,18 +54,10 @@ export class AppComponent {
   }
 
   waitAction(){
-    this.clickCount++;
-    if(this.clickCount === 1){
-      setTimeout(() => {
-        this.clickCount = 0;
-      }, 300)
-    } else {
-      this.clickCount = 0;
-      if(!this.isRunning)
+    if(!this.isRunning)
         return;
       this.isRunning = !this.isRunning;
       this.isWaiting = !this.isWaiting;
-    }
   }
 
   resetAction(){
@@ -68,6 +76,7 @@ export class AppComponent {
   }
 
   ngOnDestroy() {
-    this.timerSubscription.unsubscribe();
+    this.timer$.unsubscribe();
+    this.waitButton$.unsubscribe();
   }
 }
